@@ -1,0 +1,158 @@
+export type EngineLine = {
+  rank: number;
+  depth: number;
+  cp?: number;
+  mate?: number;
+  moves: string[];
+};
+export type EngineState = {
+  status: 'loading' | 'analyzing' | 'paused' | 'ready' | 'complete' | 'error';
+  lines: EngineLine[];
+  position?: string;
+  error?: string;
+};
+export interface Transport {
+  postMessage(command: string): void;
+  terminate(): void;
+  onmessage: ((event: { data: unknown }) => void) | null;
+  onerror: ((event: unknown) => void) | null;
+}
+type Request = { position: string; turn: 'w' | 'b'; time: number; count: number };
+export function parseInfo(text: string, turn: 'w' | 'b'): EngineLine | null {
+  const depth = text.match(/\bdepth (\d+)/),
+    score = text.match(/\bscore (cp|mate) (-?\d+)/),
+    pv = text.match(/\bpv (.+)$/);
+  if (!depth || !score || !pv || /\b(upperbound|lowerbound)\b/.test(text)) return null;
+  const sign = turn === 'w' ? 1 : -1;
+  const value = Number(score[2]) * sign;
+  return {
+    rank: Number(text.match(/\bmultipv (\d+)/)?.[1] ?? 1),
+    depth: Number(depth[1]),
+    ...(score[1] === 'cp' ? { cp: value } : { mate: value }),
+    moves: pv[1].trim().split(/\s+/),
+  };
+}
+export function formatScore(line?: EngineLine) {
+  if (!line) return '—';
+  if (line.mate !== undefined) return `${line.mate < 0 ? '−' : ''}M${Math.abs(line.mate)}`;
+  const score = (line.cp ?? 0) / 100;
+  return `${score > 0 ? '+' : ''}${score.toFixed(2)}`;
+}
+
+// UCI has no request IDs. A stopped search must finish (bestmove) before
+// another position is sent. Output is discarded from the moment stop is sent.
+export class EngineController {
+  private phase: 'loading' | 'idle' | 'searching' | 'stopping' | 'dead' = 'loading';
+  private desired: Request | null = null;
+  private active: Request | null = null;
+  private lines = new Map<number, EngineLine>();
+  private frame = new Map<number, EngineLine>();
+  private frameDepth = 0;
+  private timer: ReturnType<typeof setTimeout> | undefined;
+  constructor(
+    private worker: Transport,
+    private emit: (state: EngineState) => void,
+  ) {
+    worker.onmessage = (event) => {
+      for (const line of String(event.data).split('\n')) this.receive(line.trim());
+    };
+    worker.onerror = () =>
+      this.fail(
+        'Stockfish could not start. Check that the engine JS and WASM assets are served locally, then retry.',
+      );
+    this.emit({ status: 'loading', lines: [] });
+    this.arm(30000, 'Stockfish took too long to load. Reload or retry the engine.');
+    worker.postMessage('uci');
+  }
+  private arm(ms: number, message: string) {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => this.fail(message), ms);
+  }
+  private fail(message: string) {
+    clearTimeout(this.timer);
+    this.phase = 'dead';
+    this.worker.terminate();
+    this.emit({ status: 'error', lines: [], error: message });
+  }
+  request(position: string, turn: 'w' | 'b', time: number, count = 3) {
+    if (this.phase === 'dead') return;
+    this.desired = { position, turn, time, count: Math.max(1, Math.min(3, count)) };
+    this.lines.clear();
+    this.emit({ status: this.phase === 'loading' ? 'loading' : 'analyzing', lines: [] });
+    if (this.phase === 'searching') this.stopSearch();
+    else if (this.phase === 'idle') this.start();
+  }
+  pause() {
+    this.desired = null;
+    this.lines.clear();
+    if (this.phase === 'dead') return;
+    this.emit({ status: 'paused', lines: [] });
+    if (this.phase === 'searching') this.stopSearch();
+  }
+  private stopSearch() {
+    this.phase = 'stopping';
+    this.worker.postMessage('stop');
+    this.arm(10000, 'Stockfish did not stop its previous search. Retry the engine.');
+  }
+  private start() {
+    if (!this.desired || this.phase !== 'idle') return;
+    this.active = this.desired;
+    this.desired = null;
+    this.lines.clear();
+    this.frame.clear();
+    this.frameDepth = 0;
+    this.phase = 'searching';
+    this.worker.postMessage(this.active.position);
+    this.worker.postMessage(`go movetime ${this.active.time}`);
+    this.arm(this.active.time + 15000, 'Stockfish stopped responding. Retry the engine.');
+    this.emit({ status: 'analyzing', lines: [] });
+  }
+  private receive(text: string) {
+    if (this.phase === 'dead') return;
+    if (text === 'uciok' && this.phase === 'loading') {
+      this.worker.postMessage('setoption name Hash value 64');
+      this.worker.postMessage('setoption name MultiPV value 3');
+      this.worker.postMessage('isready');
+      return;
+    }
+    if (text === 'readyok' && this.phase === 'loading') {
+      clearTimeout(this.timer);
+      this.phase = 'idle';
+      if (this.desired) this.start();
+      else this.emit({ status: 'paused', lines: [] });
+      return;
+    }
+    if (text.startsWith('bestmove') && (this.phase === 'searching' || this.phase === 'stopping')) {
+      clearTimeout(this.timer);
+      const wasStopping = this.phase === 'stopping';
+      this.phase = 'idle';
+      if (this.desired) this.start();
+      else if (!wasStopping)
+        this.emit({ status: 'complete', lines: this.sorted(), position: this.active?.position });
+      return;
+    }
+    if (this.phase !== 'searching' || !this.active) return;
+    const line = parseInfo(text, this.active.turn);
+    if (line && line.rank >= 1 && line.rank <= this.active.count) {
+      if (line.depth < this.frameDepth) return;
+      if (line.depth > this.frameDepth) {
+        this.frame.clear();
+        this.frameDepth = line.depth;
+      }
+      this.frame.set(line.rank, line);
+      // Publish only complete MultiPV iterations so ranks never mix depths.
+      if (this.frame.size === this.active.count) {
+        this.lines = new Map(this.frame);
+        this.emit({ status: 'analyzing', lines: this.sorted(), position: this.active.position });
+      }
+    }
+  }
+  private sorted() {
+    return [...this.lines.values()].sort((a, b) => a.rank - b.rank);
+  }
+  destroy() {
+    this.phase = 'dead';
+    clearTimeout(this.timer);
+    this.worker.terminate();
+  }
+}
