@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 
 /** Fit the whole board below its opening heading using the actual layout,
  * rather than a fixed size or an estimated header-height subtraction. */
-export function useBoardFit() {
+export function useBoardFit(workspace: unknown = 'analysis') {
   const column = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
     const element = column.current;
@@ -38,6 +38,6 @@ export function useBoardFit() {
       window.removeEventListener('resize', schedule);
       window.visualViewport?.removeEventListener('resize', schedule);
     };
-  }, []);
+  }, [workspace]);
   return column;
 }

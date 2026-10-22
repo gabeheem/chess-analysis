@@ -1,6 +1,6 @@
 # Open File
 
-**A little room for chess.** A personal analysis board with local Stockfish, an opening book, branching variations, and notebooks that stay on your device.
+**A little room for chess.** A personal chess board with Elo-based engine games, local Stockfish analysis, an opening book, branching variations, and notebooks that stay on your device.
 
 Built with React, TypeScript, Vite, chess.js, Chessground, and Stockfish 19 Lite. No accounts, paid APIs, analytics, or engine servers.
 
@@ -45,6 +45,20 @@ npm run format   # format application source and documentation
 - Save named notebooks with notes. Reopen, rename, download, or delete entries from **My notebooks**. The current workspace also restores automatically after a reload.
 - Choose **New analysis → Try a classic** for a Ruy Lopez example with a Berlin alternative.
 
+## Play vs Engine
+
+Choose **Play engine** from the workspace toolbar. Select an approximate Elo, White/Black/random, and 0.5, 1.5, or 3 seconds per engine move. Switch sides before starting. The selector reads `UCI_Elo` limits from the bundled engine at runtime: the shipped Stockfish 19 Lite reports **1320–3190**. `UCI_LimitStrength` and `UCI_Elo` control the opponent; ratings are estimates, not equivalents to a Chess.com, Lichess, or FIDE rating. Hardware and thinking time affect strength.
+
+Only your pieces can move on your turn. Stockfish replies automatically; the interface shows its thinking status, move history, and the last recognized opening. Evaluations, candidate lines, and best-move arrows are off by default. Enable **Show analysis** at any point to reveal full-strength suggestions from a separate local worker; this never changes the opponent's selected Elo. Turning it off removes hints and terminates that analysis worker.
+
+Promotion, castling, and en passant use the same legal move system as analysis. Checkmate, stalemate, insufficient material, fivefold repetition, and the seventy-five-move rule end the game automatically (mate takes priority). Threefold repetition and the fifty-move rule offer an optional claim on your turn, including a claim based on an intended legal move. The engine chooses to claim an available draw on its own turn. Resignation records the result. Restarting returns to setup; leaving an unfinished game asks before discarding it, and pending searches are safely cancelled.
+
+After the result, choose **Analyze this game** to open its complete history in the analysis workspace at full strength (`UCI_LimitStrength=false`, `Skill Level=20`). Export PGN or save/update the game in **My notebooks**, including during play. Returning with **Analysis** preserves the previous analysis workspace; analyzing the completed game replaces it intentionally.
+
+Games have no chess clock. An active game lives in memory and is not resumed after a reload or leaving play: save or export it first. Saved games reopen as analysis notebooks. Each new game starts with hints off.
+
+![Play vs Engine](docs/play-engine.png)
+
 ## Storage, privacy, and offline use
 
 All chess calculation and notebook storage happen in the browser. The app has no backend. Runtime requests go only to its own origin for its JavaScript, WASM, local artwork, and opening index; following an external source link naturally leaves the app.
@@ -60,6 +74,9 @@ After `npm ci`, the local server and production build run without internet acces
 | `src/lib/study.ts`                  | Legal moves, immutable move tree, full-history reconstruction, setup validation, and safe notebook restoration |
 | `src/lib/pgn.ts`                    | Single-game PGN parser/writer with nested variations and comments                                              |
 | `src/engine/controller.ts`          | UCI handshake, search cancellation, matching-depth MultiPV frames, score normalization, and failure timeouts   |
+| `src/lib/engineGame.ts`             | Turn enforcement, draw claims, automatic endings, result headers, and stale-move rejection                     |
+| `src/engine/usePlayEngine.ts`       | Strength-limited opponent worker lifecycle and game/position request IDs                                       |
+| `src/components/PlayVsEngine.tsx`   | Game setup, controls, promotion, saving, and optional isolated live analysis                                   |
 | `src/engine/useEngine.ts`           | React worker lifecycle and position-tagged result display                                                      |
 | `src/components/Board.tsx`          | Chessground adapter, legal destinations, orientation, and engine arrows                                        |
 | `src/components/PositionEditor.tsx` | Free placement and setup fields, separate from normal legal play                                               |
@@ -84,7 +101,7 @@ Run `npm run build` and serve **all of `dist/`**, including `engine/`, `pieces/`
 
 ## Validation and limits
 
-Automated checks cover special moves, mate/stalemate, threefold history, branching, nested PGN/comment round-trips, malformed input, illegal setups, corrupted saved data, storage failures, opening transpositions, score orientation, cancellation, matching-depth candidates, and engine timeouts. A real WASM integration test starts the bundled Stockfish engine through the production controller and finds mate in one.
+Automated checks cover special moves, mate/stalemate, threefold history, branching, nested PGN/comment round-trips, malformed input, illegal setups, corrupted saved data, storage failures, opening transpositions, score orientation, cancellation, matching-depth candidates, and engine timeouts. Real WASM integration tests start the bundled Stockfish engine through the production controller, find mate in one, and verify legal replies at both supported Elo endpoints. Play tests cover turn restrictions, stale/duplicate results, special moves, claimable versus automatic draws, resignation, and returning to full-strength analysis.
 
 Browser smoke checks cover real engine startup and three candidate lines, click-to-move, promotion/underpromotion, invalid FEN feedback, opening recognition, saved notebook reload, and responsive desktop/mobile layout. See [verification notes](docs/VERIFICATION.md) for the exact checks performed during implementation.
 

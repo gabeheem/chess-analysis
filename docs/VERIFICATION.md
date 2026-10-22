@@ -28,3 +28,13 @@ Performed on Windows, Node 24.18.0, on 2026-10-21.
 The 2026-10-22 layout update was also checked in the user's 903×571 browser window: the 397-pixel board ends at pixel 559, the opening heading is visible above it, and the page is at scroll position zero. Observed layout measurements adjust the board when the window or opening heading changes.
 
 Only the available Chromium-based in-app browser was exercised manually. Safari, Firefox, touch gestures on physical devices, and very large PGN libraries were not exercised. Static-host deployment is not performed. Production-subdirectory behavior was checked locally; the actual host's MIME types and caching should be checked before publishing.
+
+## Play vs Engine update · 2026-10-22
+
+- Runtime UCI handshake reports Elo 1320–3190 and strength-limiting support. Real-engine tests produce legal replies at both endpoints.
+- Unit/protocol checks cover human/engine turns for both colors, illegal/stale/duplicate results, restarts at the same position, cancellation and worker teardown, special moves, mate/stalemate/material endings, threefold versus fivefold, fifty versus seventy-five moves, intended-move claims, resignation, PGN results, and strength reset before analysis.
+- Live browser: Black receives an automatic opening move; e7–e5 triggers a legal engine reply. White e2–e4 triggers thinking and e7–e5. A restart during a three-second opening search leaves a fresh White game at zero plies. Returning to analysis preserves the existing eleven-ply workspace.
+- Completed game saves to the notebook with its result. Browser download-event inspection is unavailable in this in-app browser; PGN content and result headers are checked by automated tests.
+- Final automated result: `npm test` passes 52 tests across three files; `npm run build` passes TypeScript and Vite production compilation.
+- Optional **Show analysis** was enabled in a live game: a +0.33 evaluation, three depth-15 candidate lines, and arrows appeared. Disabling it hides the panel/hints. A protocol test checks that its separate full-strength controller neither changes nor cancels the opponent search.
+- Resigning and choosing **Analyze this game** opens the normal analysis workspace. Original saved analysis was restored afterward; play setup is left ready for a new game.

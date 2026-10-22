@@ -35,6 +35,7 @@ import Board from './components/Board';
 import Dialog from './components/Dialog';
 import MoveTree from './components/MoveTree';
 import PositionEditor from './components/PositionEditor';
+import PlayVsEngine from './components/PlayVsEngine';
 import {
   addMove,
   enginePosition,
@@ -93,7 +94,8 @@ function pvMoves(fen: string, line: EngineLine) {
 type Modal = 'import' | 'export' | 'editor' | 'library' | 'about' | 'new' | null;
 
 export default function App() {
-  const boardColumn = useBoardFit();
+  const [mode, setMode] = useState<'analysis' | 'play'>('analysis');
+  const boardColumn = useBoardFit(mode);
   const [initial] = useState(readDraft);
   const [study, setStudy] = useState(initial.study);
   const [savedId, setSavedId] = useState<string | null>(initial.id);
@@ -127,7 +129,7 @@ export default function App() {
   const engine = useEngine(
     position,
     game.turn(),
-    enabled,
+    enabled && mode === 'analysis',
     time,
     !!terminal,
     Math.min(3, game.moves().length),
@@ -335,6 +337,27 @@ export default function App() {
         error: 'Engine unavailable',
       }[engine.status];
 
+  if (mode === 'play')
+    return (
+      <PlayVsEngine
+        openings={openingIndex}
+        onExit={() => setMode('analysis')}
+        onAnalyze={(game) => {
+          replace(game);
+          setEnabled(true);
+          setShowArrows(true);
+          setMode('analysis');
+        }}
+        onSave={(game, gameId) => {
+          const id = `engine-game-${gameId}`;
+          return persist([
+            { id, savedAt: new Date().toISOString(), study: game },
+            ...library.filter((item) => item.id !== id),
+          ]);
+        }}
+      />
+    );
+
   return (
     <div className="app-shell">
       <aside className="rail">
@@ -421,6 +444,10 @@ export default function App() {
         <main>
           <section className="workspace-heading" aria-label="Workspace tools">
             <div className="workspace-actions">
+              <button className="secondary" onClick={() => setMode('play')}>
+                <Play size={16} />
+                Play engine
+              </button>
               <button className="secondary" onClick={() => setModal('import')}>
                 <FolderInput size={16} />
                 Import game

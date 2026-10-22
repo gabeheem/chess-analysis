@@ -1996,3 +1996,248 @@ body {
     display: flex;
   }
 }
+
+.play-mode .board-opening,
+.play-mode .board-meta {
+  margin-left: 0;
+  padding-left: 0;
+}
+.play-header-label {
+  margin-left: 20px;
+  font-family: Inter, 'Segoe UI', sans-serif;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+  color: #b9a57e;
+}
+.game-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #dbc18c;
+}
+.game-panel-title h2 {
+  color: #ece8df;
+}
+.game-setup,
+.game-progress {
+  padding: 0 22px 22px;
+}
+.game-setup > label {
+  margin-top: 18px;
+}
+.range-note {
+  margin: 8px 0 17px;
+}
+.side-choice {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 12px;
+}
+.side-choice > div {
+  display: flex;
+  gap: 5px;
+}
+.side-choice [role='radio'] {
+  flex: 1;
+  background: #182231;
+  border: 1px solid #354259;
+  border-radius: 5px;
+  color: #aab6c9;
+  padding: 9px 5px;
+  font-size: 11px;
+}
+.side-choice [role='radio'].chosen {
+  background: #dbc18c19;
+  color: #eddbb6;
+  border-color: #a88e5c;
+}
+.side-choice .text-button {
+  align-self: flex-end;
+}
+.start-game {
+  margin-top: 20px;
+  width: 100%;
+}
+.game-setup > .tiny {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+.opponent-summary {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 18px;
+  gap: 7px;
+  border-bottom: 1px solid #354052;
+}
+.opponent-summary > span {
+  font-size: 8px;
+  letter-spacing: 1.6px;
+  color: #9ca7b7;
+}
+.opponent-summary > strong {
+  font-family: Georgia, serif;
+  color: #eddbb6;
+  font-size: 27px;
+  font-weight: 400;
+}
+.opponent-summary > small {
+  font-size: 11px;
+  color: #b6becb;
+}
+.game-status {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  background: #273349;
+  border: 1px solid #40516d;
+  border-radius: 6px;
+  padding: 13px 12px;
+  margin: 18px 0 12px;
+  color: #dee8f4;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.game-status.finished {
+  background: #dbc18c10;
+  border-color: #8f7950;
+  color: #efdbb0;
+}
+.game-result {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 10px 0 0;
+}
+.game-result > strong {
+  text-align: center;
+  font-family: Georgia, serif;
+  font-size: 29px;
+  font-weight: 400;
+  color: #eddbb6;
+}
+.game-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 17px;
+}
+.game-actions > .secondary {
+  flex: 1;
+}
+.intended-claim {
+  font-size: 10px;
+  margin-top: 16px;
+  white-space: normal;
+  text-align: left;
+}
+.draw-claim {
+  background: #dbc18c12;
+  border: 1px solid #796543;
+  border-radius: 6px;
+  padding: 12px;
+}
+.draw-claim p {
+  font-size: 11px;
+  color: #ddc9a2;
+  margin-bottom: 8px;
+}
+.export-game {
+  border-top: 1px solid #354052;
+  padding-top: 17px;
+  flex-wrap: wrap;
+}
+.export-game .text-button {
+  font-size: 10px;
+}
+.game-history {
+  padding: 18px 20px;
+}
+.played-move {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  color: #d5dce8;
+  padding: 2px 5px;
+}
+.played-move.latest {
+  color: #eddbb6;
+  background: #dbc18c17;
+  border-radius: 4px;
+}
+.game-notice {
+  color: #ddc9a2;
+  font-size: 11px;
+  margin: 0 22px 18px;
+}
+.play-mode .game-panel .engine-error {
+  margin-top: 5px;
+}
+@media (min-width: 621px) and (max-width: 899px) {
+  .workspace-heading {
+    position: static;
+    margin-bottom: 14px;
+  }
+}
+@media (max-width: 620px) {
+  .workspace-actions {
+    gap: 6px;
+  }
+  .workspace-actions .primary,
+  .workspace-actions .secondary {
+    font-size: 10px;
+    padding: 8px;
+    gap: 5px;
+  }
+  .play-header-label {
+    display: none;
+  }
+  .game-setup,
+  .game-progress {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+.play-analysis-toggle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 9px;
+  margin-top: 18px;
+  font-size: 12px;
+  color: #d8dfe9;
+  cursor: pointer;
+}
+.play-analysis-toggle input {
+  width: 15px;
+  height: 15px;
+  accent-color: #dbc18c;
+}
+.play-analysis {
+  padding: 18px 20px;
+}
+.live-evaluation {
+  color: #eddbb6;
+  font-size: 18px;
+  font-family: Consolas, monospace;
+}
+.play-candidate {
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid #354052;
+  font-size: 12px;
+}
+.play-candidate strong {
+  color: #eddbb6;
+  font-family: Consolas, monospace;
+}
+.play-candidate span {
+  line-height: 1.8;
+  color: #c6d0df;
+}
+.play-candidate small {
+  grid-column: 2;
+  color: #8997aa;
+  font-size: 10px;
+}
