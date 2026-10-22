@@ -1,0 +1,8 @@
+node_modules
+dist
+public/engine
+public/data
+public/pieces
+public/licenses
+data
+package-lock.json

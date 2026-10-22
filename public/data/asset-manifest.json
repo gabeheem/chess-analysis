@@ -1,0 +1,53 @@
+{
+  "generated": "2026-10-21T20:16:05.337Z",
+  "sources": {
+    "stockfish": {
+      "version": "19.0.1",
+      "source": "https://github.com/nmrugg/stockfish.js/tree/v19.0.1",
+      "archive": "https://github.com/nmrugg/stockfish.js/archive/refs/tags/v19.0.1.tar.gz",
+      "build": "lite single-threaded (upstream prebuilt npm artifact)"
+    },
+    "openings": {
+      "revision": "a6189a30dc273ccb21fc2536a9a2fefd5592a67a",
+      "source": "https://github.com/lichess-org/chess-openings/tree/a6189a30dc273ccb21fc2536a9a2fefd5592a67a",
+      "license": "CC0-1.0"
+    },
+    "pieces": {
+      "revision": "f68e0464648bb6ad16f6bf3ee476c6c49dbead41",
+      "source": "https://github.com/lichess-org/lila/tree/f68e0464648bb6ad16f6bf3ee476c6c49dbead41/public/piece/chessnut",
+      "author": "Alexis Luengas",
+      "license": "Apache-2.0"
+    }
+  },
+  "files": {
+    "public/engine/stockfish-19-lite-single.js": "ccb130d7ff29408531c47d859a49f91d59d4f482d05a53eb1a3231a4f624c91a",
+    "public/engine/stockfish-19-lite-single.wasm": "ee4f115bdb2d32cadf96cada104a05b5ec257d7ad6f57582190b49bc71f096de",
+    "public/licenses/stockfish-GPL-3.0.txt": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b",
+    "data/openings/a.tsv": "3282e4c9155289a29224f9a85fba0decb46efa35c2fa5e39662d2ac48fb0f793",
+    "data/openings/b.tsv": "1d5ed134ebbd87915ead5683416e37583bb3e5ae3582b4d8cb5cb4aa7ef4f623",
+    "data/openings/c.tsv": "45e843c7b7e79a0d04d5bda879c9bd23f5a10974488bd8615e4f4c5d0749986f",
+    "data/openings/d.tsv": "1cf4057a8aece94f27bb3f278ad410ee2844831a642364eeceaafa091dbcceda",
+    "data/openings/e.tsv": "48c6f6645b031a5937c8386839debab0e2e48837251687ba1afb6369677f8546",
+    "public/data/openings.json": "9863da81be4a101dbc118aa1f4b962d8885dab1ee4980edacd3e95614fa78707",
+    "public/licenses/openings-CC0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "public/pieces/wK.svg": "f64f2d088fe96a10fa77104cd1a42339e5495f56d6dcfda491298decbda7b2fa",
+    "public/pieces/wR.svg": "57d662b9b905a603e1cf28e36d61576dfd1a50695b23724c7189cd0f15736f03",
+    "public/pieces/wN.svg": "f0fac07e481f7b31d1b074e458908f8fcad9ee4abdc76d84c274b8c4f438e388",
+    "public/pieces/bQ.svg": "cf47f78c1ad9a99163e942f70365f8dd2b6d911011a5d8298be3d0596ad924a2",
+    "public/pieces/bR.svg": "b588445132bd2295989b94b058d6ed91605b5dffbb5b4533a2f782848cae1684",
+    "public/pieces/wP.svg": "81cde9f22edf3f750a282335a6d1367f011642d5a9bb8a94c6c6859ab1b326ea",
+    "public/pieces/bK.svg": "9e3c0ec404aec41dfabea96a204712c3feae80a456496ec0398499a1a77e642f",
+    "public/pieces/wB.svg": "ec62a67ea0212ec75e151ff673b2ef27e33e1732665839148dfdd27c357ab096",
+    "public/pieces/bN.svg": "8842b49915174de6d224273f9dffd2a84f65dc5fc2b67c83441cfbe1b423d008",
+    "public/pieces/bP.svg": "22da60dfa9fc6bfb54b1ee369dc9e3555e567e43eaea0fccad2e0211259ff0aa",
+    "public/pieces/wQ.svg": "2d20b17499c7c268ca87f3c4038a3b1335e0a087010037b0d854f2f7f84aa254",
+    "public/pieces/bB.svg": "933697379921e0a36f17a6863f5324e7f05fa73b243dab3d94e5ce8c37d064c2",
+    "public/licenses/chess.js.txt": "0b3a3c2b4432a26bb18f9d06f5bba4de015bcc980306b7db28b06025495e2186",
+    "public/licenses/@lichess-org-chessground.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "public/licenses/react.txt": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+    "public/licenses/react-dom.txt": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+    "public/licenses/lucide-react.txt": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc",
+    "public/licenses/pieces-Apache-2.0.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "public/licenses/pieces-COPYRIGHT.txt": "a66f251bcdb99479c102695a75ba292244ccf45f1f2710af552acdf4887e4f90"
+  }
+}

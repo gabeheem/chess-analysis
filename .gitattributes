@@ -7,3 +7,9 @@
 *.json text eol=lf
 *.md text eol=lf
 *.mjs text eol=lf
+# Preserve upstream artifact bytes so the recorded SHA-256 hashes match on every OS.
+public/engine/* -text
+public/licenses/* -text
+public/pieces/* -text
+data/openings/*.tsv -text
+public/data/* -text
