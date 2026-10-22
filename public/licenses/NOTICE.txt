@@ -39,13 +39,14 @@ ISC with MIT notices for Feather-derived portions, as included in the package.
 https://github.com/lucide-icons/lucide
 License: lucide-react.txt.
 
-Cburnett chess pieces
-Copyright Colin M. L. Burnett. GPL-2.0-or-later; used under GPL-3.0-or-later.
+Chessnut chess pieces
+Copyright Alexis Luengas. Apache-2.0.
 Unmodified SVG source files are included in public/pieces in the application repository.
-https://github.com/lichess-org/lila/tree/f68e0464648bb6ad16f6bf3ee476c6c49dbead41/public/piece/cburnett
+https://github.com/lichess-org/lila/tree/f68e0464648bb6ad16f6bf3ee476c6c49dbead41/public/piece/chessnut
 Upstream license attribution:
 https://github.com/lichess-org/lila/blob/f68e0464648bb6ad16f6bf3ee476c6c49dbead41/COPYING.md
-License: pieces-GPL-3.0.txt (the GPL version selected under the later-version option).
+Original project: https://github.com/LexLuengas/chessnut-pieces
+License: pieces-Apache-2.0.txt. Copyright notice: pieces-COPYRIGHT.txt.
 
 Opening names and lines
 Lichess chess-openings contributors. CC0-1.0 / public domain dedication.

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Chess, type Color } from 'chess.js';
 import {
-  ArrowDownUp,
+  RefreshCw,
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
@@ -12,13 +12,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
-  FileInput,
-  FolderOpen,
+  FolderInput,
+  LibraryBig,
   Github,
   Info,
   Lightbulb,
   LoaderCircle,
-  NotebookPen,
+  BookMarked,
+  SquarePen,
+  ScanEye,
   Pause,
   Play,
   Plus,
@@ -349,7 +351,7 @@ export default function App() {
           aria-label="Analysis workspace"
           onClick={() => setModal(null)}
         >
-          <Settings2 size={21} />
+          <ScanEye size={21} />
         </button>
         <button
           className="rail-button"
@@ -360,7 +362,7 @@ export default function App() {
             setModal('library');
           }}
         >
-          <NotebookPen size={21} />
+          <BookMarked size={21} />
         </button>
         <button
           className="rail-button"
@@ -368,7 +370,7 @@ export default function App() {
           aria-label="Position editor"
           onClick={() => setModal('editor')}
         >
-          <Plus size={23} />
+          <SquarePen size={21} />
         </button>
         <div className="rail-bottom">
           <a
@@ -396,8 +398,6 @@ export default function App() {
         <header className="app-header">
           <div className="wordmark">
             open file<span className="wordmark-dot">.</span>
-            <span className="header-separator" />
-            <span className="header-caption">A LITTLE ROOM FOR CHESS</span>
           </div>
           <div className="header-right">
             <span className="local-badge">
@@ -411,23 +411,16 @@ export default function App() {
                 setModal('library');
               }}
             >
-              <FolderOpen size={16} />
+              <LibraryBig size={16} />
               My notebooks<span className="count-badge">{library.length}</span>
             </button>
           </div>
         </header>
         <main>
-          <section className="workspace-heading">
-            <div>
-              <div className="eyebrow">THE ANALYSIS ROOM</div>
-              <h1>
-                Your next move<span>.</span>
-              </h1>
-              <p>A board, a few possibilities, and all the time you need.</p>
-            </div>
+          <section className="workspace-heading" aria-label="Workspace tools">
             <div className="workspace-actions">
               <button className="secondary" onClick={() => setModal('import')}>
-                <FileInput size={16} />
+                <FolderInput size={16} />
                 Import game
               </button>
               <button className="primary" onClick={() => setModal('new')}>
@@ -452,6 +445,26 @@ export default function App() {
           )}
           <div className="workspace-grid">
             <section className="board-column">
+              <div className="board-opening" aria-live="polite">
+                <div className="board-opening-label">
+                  <BookOpen size={15} />
+                  <span>OPENING</span>
+                  {opening && <span className="opening-code">{opening.eco}</span>}
+                </div>
+                <h1>
+                  {opening?.name ||
+                    (openingError ? 'Opening data unavailable' : 'No named opening yet')}
+                </h1>
+                {!opening && (
+                  <p>
+                    {openingError
+                      ? 'Reload to retry the opening database.'
+                      : Object.keys(openingIndex).length
+                        ? 'Play a few moves to identify the opening.'
+                        : 'Loading opening database…'}
+                  </p>
+                )}
+              </div>
               <div className="board-meta">
                 <span className="side-piece black-piece">●</span>
                 <span>{orientation === 'white' ? 'Black' : 'White'}</span>
@@ -500,7 +513,7 @@ export default function App() {
                     aria-label="Flip board"
                     onClick={() => setOrientation((o) => (o === 'white' ? 'black' : 'white'))}
                   >
-                    <ArrowDownUp size={16} />
+                    <RefreshCw size={16} />
                   </button>
                   <button
                     className="icon-button"
@@ -508,7 +521,7 @@ export default function App() {
                     aria-label="Set up a position"
                     onClick={() => setModal('editor')}
                   >
-                    <Settings2 size={16} />
+                    <SquarePen size={16} />
                   </button>
                   <button
                     className="icon-button"
@@ -578,7 +591,6 @@ export default function App() {
               <section className="analysis-panel">
                 <div className="engine-heading">
                   <div>
-                    <span className="eyebrow">YOUR SECOND PAIR OF EYES</span>
                     <h2>Engine analysis</h2>
                   </div>
                   <button
@@ -681,35 +693,12 @@ export default function App() {
                   </label>
                   <span>+ favors White</span>
                 </div>
-                <div className="opening-card">
-                  <div className="opening-icon">
-                    <BookOpen size={19} />
-                  </div>
-                  <div>
-                    <span className="eyebrow">
-                      {opening ? `OPENING · ${opening.eco}` : 'OPENING EXPLORER'}
-                    </span>
-                    <h3>
-                      {opening?.name ||
-                        (openingError ? 'Opening data unavailable' : 'An open book')}
-                    </h3>
-                    <p>
-                      {opening
-                        ? 'Last recognized opening in this line'
-                        : openingError
-                          ? 'Reload to retry the local opening database.'
-                          : Object.keys(openingIndex).length
-                            ? 'Play a few moves to find your opening.'
-                            : 'Loading local opening database…'}
-                    </p>
-                  </div>
-                </div>
                 <MoveTree study={study} select={select} />
               </section>
               <section className="notebook-panel">
                 <div className="section-heading">
                   <h2>
-                    <NotebookPen size={17} />
+                    <BookMarked size={17} />
                     Your notebook
                   </h2>
                   <button className="text-button accent" onClick={save}>
@@ -951,7 +940,7 @@ export default function App() {
           )}
           {!library.length && !libraryError && (
             <div className="library-empty">
-              <NotebookPen size={34} />
+              <BookMarked size={34} />
               <h3>A place for your discoveries.</h3>
               <p>Save your first notebook from the analysis room.</p>
               <button className="primary" onClick={save}>
@@ -1020,7 +1009,7 @@ export default function App() {
                     setRenameTitle(item.study.title);
                   }}
                 >
-                  <NotebookPen size={16} />
+                  <SquarePen size={16} />
                 </button>
                 <button
                   className="icon-button"
@@ -1089,7 +1078,7 @@ export default function App() {
           </div>
           <p className="tiny muted">
             Built with React, chess.js, Chessground, Stockfish.js, Lucide, Lichess opening data, and
-            Cburnett pieces. Free software under GPL-3.0-or-later.
+            Chessnut pieces. Free software under GPL-3.0-or-later.
           </p>
         </Dialog>
       )}

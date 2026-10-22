@@ -70,9 +70,9 @@ await save(
 const artSha = await revision('lichess-org/lila');
 manifest.sources.pieces = {
   revision: artSha,
-  source: `https://github.com/lichess-org/lila/tree/${artSha}/public/piece/cburnett`,
-  author: 'Colin M. L. Burnett',
-  license: 'GPL-2.0-or-later (use under GPL-3.0-or-later)',
+  source: `https://github.com/lichess-org/lila/tree/${artSha}/public/piece/chessnut`,
+  author: 'Alexis Luengas',
+  license: 'Apache-2.0',
 };
 await Promise.all(
   ['w', 'b'].flatMap((color) =>
@@ -82,7 +82,7 @@ await Promise.all(
         `public/pieces/${file}`,
         await (
           await get(
-            `https://raw.githubusercontent.com/lichess-org/lila/${artSha}/public/piece/cburnett/${file}`,
+            `https://raw.githubusercontent.com/lichess-org/lila/${artSha}/public/piece/chessnut/${file}`,
           )
         ).text(),
       );
@@ -101,7 +101,18 @@ for (const [name, path] of [
     await readFile(new URL(`node_modules/${name}/${path}`, base)),
   );
 }
-await save('public/licenses/pieces-GPL-3.0.txt', await readFile(new URL('LICENSE', base)));
+await save(
+  'public/licenses/pieces-Apache-2.0.txt',
+  await (
+    await get('https://raw.githubusercontent.com/LexLuengas/chessnut-pieces/master/LICENSE.txt')
+  ).text(),
+);
+await save(
+  'public/licenses/pieces-COPYRIGHT.txt',
+  await (
+    await get('https://raw.githubusercontent.com/LexLuengas/chessnut-pieces/master/COPYRIGHT.txt')
+  ).text(),
+);
 await writeFile(
   new URL('public/data/asset-manifest.json', base),
   JSON.stringify(manifest, null, 2),

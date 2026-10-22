@@ -21,7 +21,15 @@ export default function Board({ game, orientation, lastMove, arrows, onMove, dis
     api.current = Chessground(element.current!, {
       animation: { enabled: true, duration: 180 },
       premovable: { enabled: false },
-      drawable: { enabled: true },
+      drawable: {
+        enabled: true,
+        brushes: {
+          green: { key: 'green', color: '#cfab68', opacity: 0.82, lineWidth: 9 },
+          blue: { key: 'blue', color: '#81a4cd', opacity: 0.65, lineWidth: 5 },
+          red: { key: 'red', color: '#db8f83', opacity: 0.75, lineWidth: 9 },
+          yellow: { key: 'yellow', color: '#dbc18c', opacity: 0.75, lineWidth: 9 },
+        },
+      },
       movable: {
         free: false,
         rookCastle: false,

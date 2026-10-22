@@ -101,7 +101,7 @@ Practical limits and deliberate omissions:
 
 Original application code is **GPL-3.0-or-later**. Third-party components retain their own licenses. See [LICENSE](LICENSE), [third-party notices](public/licenses/NOTICE.txt), and the [asset manifest](public/data/asset-manifest.json).
 
-In particular: Stockfish.js is GPL-3.0, Chessground is GPL-3.0-or-later, chess.js is BSD-2-Clause, React is MIT, Lucide is ISC with the included Feather notices, Cburnett pieces are GPL-2.0-or-later (used under GPL-3.0-or-later), and opening data is CC0.
+In particular: Stockfish.js is GPL-3.0, Chessground is GPL-3.0-or-later, chess.js is BSD-2-Clause, React is MIT, Lucide is ISC with the included Feather notices, Chessnut pieces by Alexis Luengas are Apache-2.0, and opening data is CC0.
 
 The exact [Stockfish.js 19.0.1 release](https://github.com/nmrugg/stockfish.js/releases/tag/v19.0.1), [corresponding source](https://github.com/nmrugg/stockfish.js/tree/v19.0.1), and [source archive](https://github.com/nmrugg/stockfish.js/archive/refs/tags/v19.0.1.tar.gz) are linked in the distributed notices. Engine binaries are unmodified.
 
