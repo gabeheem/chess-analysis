@@ -1937,3 +1937,62 @@ body {
     display: flex;
   }
 }
+
+/* Keep the complete board and opening in the first screen. The hook measures
+   the real space above the board, including wrapping opening names. */
+.board-column {
+  width: 100%;
+  max-width: min(100%, var(--board-fit-width, 100%));
+  justify-self: center;
+}
+.board-opening {
+  min-height: 0;
+  margin-bottom: 10px;
+}
+.board-opening-label {
+  margin-bottom: 5px;
+}
+.board-opening h1 {
+  font-size: 21px;
+}
+.board-meta {
+  height: 28px;
+}
+.bottom-meta {
+  height: 38px;
+}
+@media (min-width: 621px) {
+  .main-shell {
+    position: relative;
+  }
+  .app-header {
+    height: 56px;
+  }
+  .local-badge {
+    display: none;
+  }
+  main {
+    padding-top: 16px;
+  }
+  .workspace-heading {
+    position: absolute;
+    top: 9px;
+    right: 215px;
+    margin: 0;
+  }
+  .workspace-actions .primary,
+  .workspace-actions .secondary {
+    min-height: 34px;
+    padding: 8px 11px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 900px) {
+  .workspace-grid {
+    grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr);
+    max-width: none;
+  }
+  .analysis-column {
+    display: flex;
+  }
+}

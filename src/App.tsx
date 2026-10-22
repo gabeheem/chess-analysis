@@ -51,6 +51,7 @@ import { findOpening, type OpeningMap } from './lib/openings';
 import { downloadFile, readLibrary, writeLibrary, type SavedStudy } from './lib/storage';
 import { formatScore, type EngineLine } from './engine/controller';
 import { useEngine } from './engine/useEngine';
+import { useBoardFit } from './lib/useBoardFit';
 
 const DRAFT = 'open-file:workspace:v1';
 const SAMPLE =
@@ -92,6 +93,7 @@ function pvMoves(fen: string, line: EngineLine) {
 type Modal = 'import' | 'export' | 'editor' | 'library' | 'about' | 'new' | null;
 
 export default function App() {
+  const boardColumn = useBoardFit();
   const [initial] = useState(readDraft);
   const [study, setStudy] = useState(initial.study);
   const [savedId, setSavedId] = useState<string | null>(initial.id);
@@ -444,7 +446,7 @@ export default function App() {
             </div>
           )}
           <div className="workspace-grid">
-            <section className="board-column">
+            <section className="board-column" ref={boardColumn}>
               <div className="board-opening" aria-live="polite">
                 <div className="board-opening-label">
                   <BookOpen size={15} />

@@ -25,4 +25,6 @@ Performed on Windows, Node 24.18.0, on 2026-10-21.
 
 ## Limits of verification
 
+The 2026-10-22 layout update was also checked in the user's 903×571 browser window: the 397-pixel board ends at pixel 559, the opening heading is visible above it, and the page is at scroll position zero. Observed layout measurements adjust the board when the window or opening heading changes.
+
 Only the available Chromium-based in-app browser was exercised manually. Safari, Firefox, touch gestures on physical devices, and very large PGN libraries were not exercised. Static-host deployment is not performed. Production-subdirectory behavior was checked locally; the actual host's MIME types and caching should be checked before publishing.

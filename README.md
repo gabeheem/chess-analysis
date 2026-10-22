@@ -34,6 +34,7 @@ npm run format   # format application source and documentation
 
 ## Explore
 
+- The board measures the available window height so its opening heading and all eight ranks fit together without scrolling. Resize the window and it adjusts automatically.
 - Drag a piece or click its starting and destination squares. Legal destinations are highlighted. Castling, en passant, and all four promotion choices are supported.
 - Stockfish analyzes each position locally, shows up to three candidate lines, and draws best-move arrows. Click a continuation move to add that sequence to your notebook.
 - Choose 1, 2.5, 8, or 20 seconds per position, pause analysis, or retry a failed engine. All scores favor White when positive. Mate scores are shown separately.
